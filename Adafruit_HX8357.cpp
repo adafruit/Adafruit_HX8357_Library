@@ -247,6 +247,8 @@ void Adafruit_HX8357::begin(uint8_t type) {
     writecommand(HX8357_DISPON);
     delay(10);
   } else if (type == HX8357D) {
+    writecommand(HX8357_SWRESET);
+
     // setextc
     writecommand(HX8357D_SETC);
     writedata(0xFF);
@@ -255,7 +257,8 @@ void Adafruit_HX8357::begin(uint8_t type) {
     delay(300);
     // setRGB which also enables SDO
     writecommand(HX8357_SETRGB); 
-    writedata(0x80);  //enable SDO pin!
+//    writedata(0x80);  //enable SDO pin!
+    writedata(0x00);  //disable SDO pin!
     writedata(0x0);
     writedata(0x06);
     writedata(0x06);
