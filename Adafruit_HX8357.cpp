@@ -1,6 +1,6 @@
 /***************************************************
-  This is our library for the Adafruit HX8357 Breakout and Shield
-  ----> http://www.adafruit.com/products/1651
+  This is our library for the Adafruit HX8357D Breakout
+  ----> http://www.adafruit.com/products/2050
 
   Check out the links above for our tutorials and wiring diagrams
   These displays use SPI to communicate, 4 or 5 pins are required to

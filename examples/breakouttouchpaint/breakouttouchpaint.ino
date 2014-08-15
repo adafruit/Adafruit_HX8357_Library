@@ -27,9 +27,9 @@
 #define XP 5   // can be a digital pin
 
 // This is calibration data for the raw touch data to the screen coordinates
-#define TS_MINX 150
-#define TS_MINY 120
-#define TS_MAXX 920
+#define TS_MINX 110
+#define TS_MINY 80
+#define TS_MAXX 900
 #define TS_MAXY 940
 
 #define MINPRESSURE 10
@@ -55,7 +55,7 @@ int oldcolor, currentcolor;
 void setup(void) {
  // while (!Serial);     // used for leonardo debugging
  
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println(F("Touch Paint!"));
   
   tft.begin(HX8357D);
@@ -81,20 +81,17 @@ void loop()
 {
   // Retrieve a point  
   TSPoint p = ts.getPoint();
-  
  
+  // we have some minimum pressure we consider 'valid'
+  // pressure of 0 means no pressing!
+  if (p.z < MINPRESSURE || p.z > MAXPRESSURE) {
+     return;
+  }
+
   Serial.print("X = "); Serial.print(p.x);
   Serial.print("\tY = "); Serial.print(p.y);
   Serial.print("\tPressure = "); Serial.println(p.z);  
- 
-  
-  // we have some minimum pressure we consider 'valid'
-  // pressure of 0 means no pressing!
- /* if (p.z < MINPRESSURE || p.z > MAXPRESSURE) {
-     return;
-  }
-  */
-  if (p.x  == 0) return;
+   
   // Scale from ~0->1000 to tft.width using the calibration #'s
   p.x = map(p.x, TS_MINX, TS_MAXX, 0, tft.width());
   p.y = map(p.y, TS_MINY, TS_MAXY, 0, tft.height());
