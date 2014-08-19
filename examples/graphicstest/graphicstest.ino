@@ -45,36 +45,25 @@ void setup() {
   
   Serial.println(F("Benchmark                Time (microseconds)"));
 
-  Serial.print(F("Screen fill              "));
-  Serial.println(testFillScreen());
-  delay(500);
+  tft.setRotation(1);
 
   Serial.print(F("Text                     "));
   Serial.println(testText());
-  delay(3000);
+  delay(500);
 
   Serial.print(F("Lines                    "));
   Serial.println(testLines(HX8357_CYAN));
-  delay(500);
-
-  Serial.print(F("Horiz/Vert Lines         "));
-  Serial.println(testFastLines(HX8357_RED, HX8357_BLUE));
   delay(500);
 
   Serial.print(F("Rectangles (outline)     "));
   Serial.println(testRects(HX8357_GREEN));
   delay(500);
 
-  Serial.print(F("Rectangles (filled)      "));
-  Serial.println(testFilledRects(HX8357_YELLOW, HX8357_MAGENTA));
-  delay(500);
-
-  Serial.print(F("Circles (filled)         "));
-  Serial.println(testFilledCircles(10, HX8357_MAGENTA));
-
+  tft.fillScreen(HX8357_BLACK);
   Serial.print(F("Circles (outline)        "));
-  Serial.println(testCircles(10, HX8357_WHITE));
+  Serial.println(testCircles(10, HX8357_RED));
   delay(500);
+
 
   Serial.print(F("Triangles (outline)      "));
   Serial.println(testTriangles());
@@ -83,6 +72,7 @@ void setup() {
   Serial.print(F("Triangles (filled)       "));
   Serial.println(testFilledTriangles());
   delay(500);
+
 
   Serial.print(F("Rounded rects (outline)  "));
   Serial.println(testRoundRects());
@@ -93,7 +83,6 @@ void setup() {
   delay(500);
 
   Serial.println(F("Done!"));
-
 }
 
 
@@ -139,6 +128,20 @@ unsigned long testText() {
   tft.println("in the gobberwarts");
   tft.println("with my blurglecruncheon,");
   tft.println("see if I don't!");
+  
+  tft.setTextColor(HX8357_WHITE);
+  tft.println(F("Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversations?'"));
+
+tft.println(F("So she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid), whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly a White Rabbit with pink eyes ran close by her."));
+
+tft.println(F("There was nothing so very remarkable in that; nor did Alice think it so very much out of the way to hear the Rabbit say to itself, 'Oh dear! Oh dear! I shall be late!' (when she thought it over afterwards, it occurred to her that she ought to have wondered at this, but at the time it all seemed quite natural); but when the Rabbit actually took a watch out of its waistcoat-pocket, and looked at it, and then hurried on, Alice started to her feet, for it flashed across her mind that she had never before seen a rabbit with either a waistcoat-pocket, or a watch to take out of it, and burning with curiosity, she ran across the field after it, and fortunately was just in time to see it pop down a large rabbit-hole under the hedge."));
+
+tft.println(F("In another moment down went Alice after it, never once considering how in the world she was to get out again."));
+
+tft.println(F("The rabbit-hole went straight on like a tunnel for some way, and then dipped suddenly down, so suddenly that Alice had not a moment to think about stopping herself before she found herself falling down a very deep well."));
+
+tft.println(F("Either the well was very deep, or she fell very slowly, for she had plenty of time as she went down to look about her and to wonder what was going to happen next. First, she tried to look down and make out what she was coming to, but it was too dark to see anything; then she looked at the sides of the well, and noticed that they were filled with cupboards and book-shelves; here and there she saw maps and pictures hung upon pegs. She took down a jar from one of the shelves as she passed; it was labelled 'ORANGE MARMALADE', but to her great disappointment it was empty: she did not like to drop the jar for fear of killing somebody, so managed to put it into one of the cupboards as she fell past it."));
+  
   return micros() - start;
 }
 
@@ -158,37 +161,6 @@ unsigned long testLines(uint16_t color) {
   for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
   t     = micros() - start; // fillScreen doesn't count against timing
 
-  tft.fillScreen(HX8357_BLACK);
-
-  x1    = w - 1;
-  y1    = 0;
-  y2    = h - 1;
-  start = micros();
-  for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  x2    = 0;
-  for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  t    += micros() - start;
-
-  tft.fillScreen(HX8357_BLACK);
-
-  x1    = 0;
-  y1    = h - 1;
-  y2    = 0;
-  start = micros();
-  for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  x2    = w - 1;
-  for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  t    += micros() - start;
-
-  tft.fillScreen(HX8357_BLACK);
-
-  x1    = w - 1;
-  y1    = h - 1;
-  y2    = 0;
-  start = micros();
-  for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  x2    = 0;
-  for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
 
   return micros() - start;
 }
@@ -288,7 +260,7 @@ unsigned long testTriangles() {
       cx    , cy - i, // peak
       cx - i, cy + i, // bottom left
       cx + i, cy + i, // bottom right
-      tft.color565(0, 0, i));
+      tft.color565(200, 20, i));
   }
 
   return micros() - start;
@@ -316,15 +288,15 @@ unsigned long testFilledTriangles() {
 unsigned long testRoundRects() {
   unsigned long start;
   int           w, i, i2,
-                cx = tft.width()  / 2 - 1,
-                cy = tft.height() / 2 - 1;
+                cx = tft.width()  / 2 ,
+                cy = tft.height() / 2 ;
 
   tft.fillScreen(HX8357_BLACK);
   w     = min(tft.width(), tft.height());
   start = micros();
-  for(i=0; i<w; i+=6) {
-    i2 = i / 2;
-    tft.drawRoundRect(cx-i2, cy-i2, i, i, i/8, tft.color565(i, 0, 0));
+  for(i=0; i<w; i+=8) {
+    i2 = i / 2 - 2;
+    tft.drawRoundRect(cx-i2, cy-i2, i, i, i/8, tft.color565(i, 100, 100));
   }
 
   return micros() - start;
@@ -333,14 +305,14 @@ unsigned long testRoundRects() {
 unsigned long testFilledRoundRects() {
   unsigned long start;
   int           i, i2,
-                cx = tft.width()  / 2 - 1,
-                cy = tft.height() / 2 - 1;
+                cx = tft.width()  / 2 + 10,
+                cy = tft.height() / 2 + 10;
 
   tft.fillScreen(HX8357_BLACK);
   start = micros();
-  for(i=min(tft.width(), tft.height()); i>20; i-=6) {
+  for(i=min(tft.width(), tft.height()) - 20; i>20; i-=6) {
     i2 = i / 2;
-    tft.fillRoundRect(cx-i2, cy-i2, i, i, i/8, tft.color565(0, i, 0));
+    tft.fillRoundRect(cx-i2, cy-i2, i-20, i-20, i/8, tft.color565(100, i/2, 100));
   }
 
   return micros() - start;

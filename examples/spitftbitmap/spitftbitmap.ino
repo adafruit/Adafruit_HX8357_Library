@@ -1,5 +1,5 @@
 /***************************************************
-  This is our Bitmap drawing example for the Adafruit HX8357 Breakout and Shield
+  This is our Bitmap drawing example for the Adafruit HX8357 Breakout
   ----> http://www.adafruit.com/products/2050
 
   Check out the links above for our tutorials and wiring diagrams

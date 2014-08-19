@@ -1,6 +1,6 @@
 /***************************************************
   This is our touchscreen painting example for the Adafruit HX8357 Breakout
-  ----> http://www.adafruit.com/products/1770
+  ----> http://www.adafruit.com/products/2050
 
   Check out the links above for our tutorials and wiring diagrams
   These displays use SPI to communicate, 4 or 5 pins are required to
@@ -13,7 +13,7 @@
   MIT license, all text above must be included in any redistribution
  ****************************************************/
 
-/** NOT FOR USE WITH THE TOUCH SHIELD, ONLY FOR THE BREAKOUT! **/
+/** NOT FOR USE WITH THE TOUCH SHIELD, ONLY FOR THE 3.5" BREAKOUT! **/
 
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <SPI.h>
@@ -23,8 +23,8 @@
 // These are the four touchscreen analog pins
 #define YP A2  // must be an analog pin, use "An" notation!
 #define XM A3  // must be an analog pin, use "An" notation!
-#define YM 6   // can be a digital pin
-#define XP 5   // can be a digital pin
+#define YM 7   // can be a digital pin
+#define XP 8   // can be a digital pin
 
 // This is calibration data for the raw touch data to the screen coordinates
 #define TS_MINX 110
@@ -36,7 +36,7 @@
 #define MAXPRESSURE 1000
 
 // The display uses hardware SPI, plus #9 & #10
-#define TFT_RST 8
+#define TFT_RST -1  // dont use a reset pin, tie to arduino RST if you like
 #define TFT_DC 9
 #define TFT_CS 10
 
@@ -53,7 +53,7 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 int oldcolor, currentcolor;
 
 void setup(void) {
- // while (!Serial);     // used for leonardo debugging
+  while (!Serial);     // used for leonardo debugging
  
   Serial.begin(115200);
   Serial.println(F("Touch Paint!"));
