@@ -23,7 +23,7 @@
  #include "WProgram.h"
 #endif
 #include <Adafruit_GFX.h>
-#ifdef __AVR
+#if defined (__AVR__) || defined(TEENSYDUINO)
   #include <avr/pgmspace.h>
 #elif defined(ESP8266)
   #include <pgmspace.h>
@@ -158,7 +158,7 @@ class Adafruit_HX8357 : public Adafruit_GFX {
 
 
   boolean  hwSPI;
-#if defined (__AVR__)
+#if defined (__AVR__) || defined(TEENSYDUINO)
   uint8_t mySPCR;
   volatile uint8_t *mosiport, *clkport, *dcport, *rsport, *csport;
   int8_t  _cs, _dc, _rst, _mosi, _miso, _sclk;

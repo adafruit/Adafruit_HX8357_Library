@@ -52,7 +52,7 @@ void Adafruit_HX8357::spiwrite(uint8_t c) {
   //Serial.print("0x"); Serial.print(c, HEX); Serial.print(", ");
 
   if (hwSPI) {
-#if defined (__AVR__)
+#if defined (__AVR__) || defined(TEENSYDUINO)
     uint8_t backupSPCR = SPCR;
     SPCR = mySPCR;
     SPDR = c;
@@ -130,7 +130,7 @@ void Adafruit_HX8357::begin(uint8_t type) {
   dcpinmask = digitalPinToBitMask(_dc);
 
   if(hwSPI) { // Using hardware SPI
-#if defined (__AVR__)
+#if defined (__AVR__) || defined(TEENSYDUINO)
     SPI.begin();
     SPI.setClockDivider(SPI_CLOCK_DIV2); // 8 MHz (full! speed!)
     SPI.setBitOrder(MSBFIRST);
@@ -568,14 +568,14 @@ uint8_t Adafruit_HX8357::spiread(void) {
   uint8_t r = 0;
 
   if (hwSPI) {
-#if defined (__AVR__)
+#if defined (__AVR__) || defined(TEENSYDUINO)
     uint8_t backupSPCR = SPCR;
     SPCR = mySPCR;
     SPDR = 0x00;
     while(!(SPSR & _BV(SPIF)));
     r = SPDR;
     SPCR = backupSPCR;
-#elif defined (__arm__)
+#elif defined (__SAM3X8E__)
     SPI.setClockDivider(11); // 8-ish MHz (full! speed!)
     SPI.setBitOrder(MSBFIRST);
     SPI.setDataMode(SPI_MODE0);
