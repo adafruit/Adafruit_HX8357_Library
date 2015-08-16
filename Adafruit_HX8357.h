@@ -163,7 +163,7 @@ class Adafruit_HX8357 : public Adafruit_GFX {
   volatile uint8_t *mosiport, *clkport, *dcport, *rsport, *csport;
   int8_t  _cs, _dc, _rst, _mosi, _miso, _sclk;
   uint8_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;
-#elif defined (__arm__)
+#elif defined (__SAM3X8E__)
     volatile RwReg *mosiport, *clkport, *dcport, *rsport, *csport;
     uint32_t  _cs, _dc, _rst, _mosi, _miso, _sclk;
     uint32_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;

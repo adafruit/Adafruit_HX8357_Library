@@ -58,7 +58,7 @@ void Adafruit_HX8357::spiwrite(uint8_t c) {
     SPDR = c;
     while(!(SPSR & _BV(SPIF)));
     SPCR = backupSPCR;
-#elif defined (__arm__)
+#elif defined (__SAM3X8E__)
     SPI.setClockDivider(11); // 8-ish MHz (full! speed!)
     SPI.setBitOrder(MSBFIRST);
     SPI.setDataMode(SPI_MODE0);
@@ -136,7 +136,7 @@ void Adafruit_HX8357::begin(uint8_t type) {
     SPI.setBitOrder(MSBFIRST);
     SPI.setDataMode(SPI_MODE0);
     mySPCR = SPCR;
-#elif defined (__arm__)
+#elif defined (__SAM3X8E__)
     SPI.begin();
     SPI.setClockDivider(11); // 8-ish MHz (full! speed!)
     SPI.setBitOrder(MSBFIRST);
