@@ -52,18 +52,9 @@ void Adafruit_HX8357::spiwrite(uint8_t c) {
   //Serial.print("0x"); Serial.print(c, HEX); Serial.print(", ");
 
   if (hwSPI) {
-#if defined (__AVR__) || defined(TEENSYDUINO)
-    uint8_t backupSPCR = SPCR;
-    SPCR = mySPCR;
-    SPDR = c;
-    while(!(SPSR & _BV(SPIF)));
-    SPCR = backupSPCR;
-#elif defined (__SAM3X8E__)
-    SPI.setClockDivider(11); // 8-ish MHz (full! speed!)
-    SPI.setBitOrder(MSBFIRST);
-    SPI.setDataMode(SPI_MODE0);
+    SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
     SPI.transfer(c);
-#endif
+    SPI.endTransaction();
   } else {
     // Fast SPI bitbang swiped from LPD8806 library
     for(uint8_t bit = 0x80; bit; bit >>= 1) {
@@ -130,18 +121,7 @@ void Adafruit_HX8357::begin(uint8_t type) {
   dcpinmask = digitalPinToBitMask(_dc);
 
   if(hwSPI) { // Using hardware SPI
-#if defined (__AVR__) || defined(TEENSYDUINO)
     SPI.begin();
-    SPI.setClockDivider(SPI_CLOCK_DIV2); // 8 MHz (full! speed!)
-    SPI.setBitOrder(MSBFIRST);
-    SPI.setDataMode(SPI_MODE0);
-    mySPCR = SPCR;
-#elif defined (__SAM3X8E__)
-    SPI.begin();
-    SPI.setClockDivider(11); // 8-ish MHz (full! speed!)
-    SPI.setBitOrder(MSBFIRST);
-    SPI.setDataMode(SPI_MODE0);
-#endif
   } else {
     pinMode(_sclk, OUTPUT);
     pinMode(_mosi, OUTPUT);
@@ -252,7 +232,7 @@ void Adafruit_HX8357::begin(uint8_t type) {
     delay(10);
   } else if (type == HX8357D) {
     writecommand(HX8357_SWRESET);
-
+    delay(10);
     // setextc
     writecommand(HX8357D_SETC);
     writedata(0xFF);
@@ -397,7 +377,7 @@ void Adafruit_HX8357::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
   if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) return;
 
-  setAddrWindow(x,y,x+1,y+1);
+  setAddrWindow(x,y,x,y);
 
   //digitalWrite(_dc, HIGH);
   *dcport |=  dcpinmask;
@@ -568,19 +548,9 @@ uint8_t Adafruit_HX8357::spiread(void) {
   uint8_t r = 0;
 
   if (hwSPI) {
-#if defined (__AVR__) || defined(TEENSYDUINO)
-    uint8_t backupSPCR = SPCR;
-    SPCR = mySPCR;
-    SPDR = 0x00;
-    while(!(SPSR & _BV(SPIF)));
-    r = SPDR;
-    SPCR = backupSPCR;
-#elif defined (__SAM3X8E__)
-    SPI.setClockDivider(11); // 8-ish MHz (full! speed!)
-    SPI.setBitOrder(MSBFIRST);
-    SPI.setDataMode(SPI_MODE0);
+    SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE0));
     r = SPI.transfer(0x00);
-#endif
+    SPI.endTransaction();              // release the SPI bus
   } else {
 
     for (uint8_t i=0; i<8; i++) {
