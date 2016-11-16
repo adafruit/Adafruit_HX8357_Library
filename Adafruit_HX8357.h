@@ -42,6 +42,8 @@ typedef volatile uint8_t RwReg;
   #endif
 #elif defined (ESP8266) || defined (ESP32)
 typedef volatile uint32_t RwReg;
+#elif defined (__ARDUINO_ARC__)
+typedef volatile uint32_t RwReg;
 #endif
 
 
