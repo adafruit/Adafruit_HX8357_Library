@@ -29,6 +29,22 @@
   #include <pgmspace.h>
 #endif
 
+// define here the size of a register!
+#if defined(ARDUINO_STM32_FEATHER)
+typedef volatile uint32 RwReg;
+#elif defined (__AVR__)
+typedef volatile uint8_t RwReg;
+#elif defined (__arm__)
+  #if defined(TEENSYDUINO)
+  typedef volatile uint8_t RwReg;
+  #else
+  typedef volatile uint32_t RwReg;
+  #endif
+#elif defined (ESP8266) || defined (ESP32)
+typedef volatile uint32_t RwReg;
+#endif
+
+
 #define HX8357D 0xD
 #define HX8357B 0xB
 
@@ -155,19 +171,10 @@ class Adafruit_HX8357 : public Adafruit_GFX {
  private:
   uint8_t  tabcolor;
 
-
-
-  boolean  hwSPI;
-#if defined (__AVR__) || defined(TEENSYDUINO)
-  uint8_t mySPCR;
-  volatile uint8_t *mosiport, *clkport, *dcport, *rsport, *csport;
   int8_t  _cs, _dc, _rst, _mosi, _miso, _sclk;
-  uint8_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;
-#elif defined (__SAM3X8E__)
-    volatile RwReg *mosiport, *clkport, *dcport, *rsport, *csport;
-    uint32_t  _cs, _dc, _rst, _mosi, _miso, _sclk;
-    uint32_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;
-#endif
+
+  volatile RwReg *mosiport, *clkport, *dcport, *csport;
+  uint32_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;
 };
 
 #endif

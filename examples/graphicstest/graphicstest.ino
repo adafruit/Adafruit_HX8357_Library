@@ -25,6 +25,11 @@
 // Use hardware SPI (on Uno, #13, #12, #11) and the above for CS/DC
 Adafruit_HX8357 tft = Adafruit_HX8357(TFT_CS, TFT_DC, TFT_RST);
 
+// SoftSPI - note that on some processors this might be *faster* than hardware SPI!
+//Adafruit_HX8357 tft = Adafruit_HX8357(TFT_CS, TFT_DC, MOSI, SCK, TFT_RST, MISO);
+
+
+
 void setup() {
   Serial.begin(9600);
   Serial.println("HX8357D Test!"); 
