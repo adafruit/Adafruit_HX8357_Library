@@ -36,7 +36,8 @@
   typedef volatile uint8_t RwReg;
   #define USE_FAST_PINIO
  #elif defined(NRF52)
-  typedef volatile uint8_t RwReg;
+  typedef volatile uint32_t RwReg;
+  #define USE_FAST_PINIO
  #else
   typedef volatile uint32_t RwReg;
   #define USE_FAST_PINIO
