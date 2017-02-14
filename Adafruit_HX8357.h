@@ -30,20 +30,24 @@
 #endif
 
 // define here the size of a register!
-#if defined(ARDUINO_STM32_FEATHER)
-typedef volatile uint32 RwReg;
-#elif defined (__AVR__)
-typedef volatile uint8_t RwReg;
-#elif defined (__arm__)
-  #if defined(TEENSYDUINO)
+
+#if defined (__arm__) || defined(ARDUINO_STM32_FEATHER)
+ #if defined(TEENSYDUINO)
   typedef volatile uint8_t RwReg;
-  #else
+  #define USE_FAST_PINIO
+ #elif defined(NRF52)
+  typedef volatile uint8_t RwReg;
+ #else
   typedef volatile uint32_t RwReg;
-  #endif
+  #define USE_FAST_PINIO
+ #endif
+#elif defined (__AVR__)
+  typedef volatile uint8_t RwReg;
+  #define USE_FAST_PINIO
 #elif defined (ESP8266) || defined (ESP32)
-typedef volatile uint32_t RwReg;
+  typedef volatile uint32_t RwReg;
 #elif defined (__ARDUINO_ARC__)
-typedef volatile uint32_t RwReg;
+  typedef volatile uint32_t RwReg;
 #endif
 
 
@@ -175,8 +179,10 @@ class Adafruit_HX8357 : public Adafruit_GFX {
 
   int8_t  _cs, _dc, _rst, _mosi, _miso, _sclk;
 
+#if defined (USE_FAST_PINIO)
   volatile RwReg *mosiport, *clkport, *dcport, *csport;
   uint32_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;
+#endif
 };
 
 #endif

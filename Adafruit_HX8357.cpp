@@ -49,59 +49,75 @@ Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t rst) : Adafruit_GF
 }
 
 void Adafruit_HX8357::spiwrite(uint8_t c) {
-
-  //Serial.print("0x"); Serial.print(c, HEX); Serial.print(", ");
-
   if (_sclk == -1) {
     // hardware SPI!
     SPI.transfer(c);
   } else {
+
+#if defined (USE_FAST_PINIO)
     *clkport &= ~clkpinmask;
-    //digitalWrite(_sclk, LOW);
     
     // Fast SPI bitbang swiped from LPD8806 library
     for(uint8_t bit = 0x80; bit; bit >>= 1) {
       if(c & bit) {
-	//digitalWrite(_mosi, HIGH); 
 	*mosiport |=  mosipinmask;
       } else {
-	//digitalWrite(_mosi, LOW); 
 	*mosiport &= ~mosipinmask;
       }
-      //digitalWrite(_sclk, HIGH);
       *clkport |=  clkpinmask;
-      //digitalWrite(_sclk, LOW);
       *clkport &= ~clkpinmask;
     }
+#else 
+    digitalWrite(_sclk, LOW);
+    
+    // Fast SPI bitbang swiped from LPD8806 library
+    for(uint8_t bit = 0x80; bit; bit >>= 1) {
+      if(c & bit) {
+	digitalWrite(_mosi, HIGH); 
+      } else {
+	digitalWrite(_mosi, LOW); 
+      }
+      digitalWrite(_sclk, HIGH);
+      digitalWrite(_sclk, LOW);
+    }
+#endif
   }
 }
 
 
 void Adafruit_HX8357::writecommand(uint8_t c) {
-  *dcport &=  ~dcpinmask;
-  //digitalWrite(_dc, LOW);
+#if defined (USE_FAST_PINIO)
+  *dcport &= ~dcpinmask;
   *csport &= ~cspinmask;
-  //digitalWrite(_cs, LOW);
+#else
+  digitalWrite(_dc, LOW);
+  digitalWrite(_cs, LOW);
+#endif
 
   if (_sclk == -1)
     SPI.beginTransaction(spi_settings);
 
   spiwrite(c);
-  //Serial.print("Command 0x"); Serial.println(c, HEX);
 
   if (_sclk == -1)
     SPI.endTransaction();
 
+#if defined (USE_FAST_PINIO)
   *csport |= cspinmask;
-  //digitalWrite(_cs, HIGH);
+#else
+  digitalWrite(_cs, HIGH);
+#endif
 }
 
 
 void Adafruit_HX8357::writedata(uint8_t c) {
+#if defined (USE_FAST_PINIO)
   *dcport |=  dcpinmask;
-  //digitalWrite(_dc, HIGH);
   *csport &= ~cspinmask;
-  //digitalWrite(_cs, LOW);
+#else
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+#endif
 
   if (_sclk == -1)
     SPI.beginTransaction(spi_settings);
@@ -112,8 +128,11 @@ void Adafruit_HX8357::writedata(uint8_t c) {
   if (_sclk == -1)
     SPI.endTransaction();
 
-  //digitalWrite(_cs, HIGH);
+#if defined (USE_FAST_PINIO)
   *csport |= cspinmask;
+#else
+  digitalWrite(_cs, HIGH);
+#endif
 } 
 
 
@@ -126,10 +145,18 @@ void Adafruit_HX8357::begin(uint8_t type) {
 
   pinMode(_dc, OUTPUT);
   pinMode(_cs, OUTPUT);
+
+#if defined (USE_FAST_PINIO)
+  //Serial.print("CS port #"); Serial.println((uint32_t)digitalPinToPort(_cs), HEX);
   csport    = portOutputRegister(digitalPinToPort(_cs));
+  //Serial.print("CSPort 0x"); Serial.println((uint32_t)csport, HEX);
   cspinmask = digitalPinToBitMask(_cs);
+  //Serial.print("CSPinmask 0x"); Serial.println((uint32_t)cspinmask , HEX);
   dcport    = portOutputRegister(digitalPinToPort(_dc));
+  //Serial.print("DCPort 0x"); Serial.println((uint32_t)dcport, HEX);
   dcpinmask = digitalPinToBitMask(_dc);
+  //Serial.print("DCPinmask 0x"); Serial.println((uint32_t)dcpinmask , HEX);
+#endif
 
   if(_sclk == -1) { // Using hardware SPI
     SPI.begin();
@@ -137,12 +164,17 @@ void Adafruit_HX8357::begin(uint8_t type) {
     pinMode(_sclk, OUTPUT);
     pinMode(_mosi, OUTPUT);
     pinMode(_miso, INPUT);
+#if defined (USE_FAST_PINIO)
     clkport     = portOutputRegister(digitalPinToPort(_sclk));
     clkpinmask  = digitalPinToBitMask(_sclk);
     mosiport    = portOutputRegister(digitalPinToPort(_mosi));
     mosipinmask = digitalPinToBitMask(_mosi);
     *clkport   &= ~clkpinmask;
     *mosiport  &= ~mosipinmask;
+#else
+    digitalWrite(_sclk, LOW);
+    digitalWrite(_mosi, LOW);
+#endif
   }
 
   // toggle RST low to reset
@@ -157,7 +189,7 @@ void Adafruit_HX8357::begin(uint8_t type) {
 
   
   if (type == HX8357B) {
-    Serial.println("linux HX8357B"); 
+    //Serial.println("linux HX8357B"); 
     // seqpower
     writecommand(HX8357B_SETPOWER);
     writedata(0x44);
@@ -244,12 +276,14 @@ void Adafruit_HX8357::begin(uint8_t type) {
   } else if (type == HX8357D) {
     writecommand(HX8357_SWRESET);
     delay(10);
+
     // setextc
     writecommand(HX8357D_SETC);
     writedata(0xFF);
     writedata(0x83);
     writedata(0x57);
     delay(300);
+
     // setRGB which also enables SDO
     writecommand(HX8357_SETRGB); 
     writedata(0x80);  //enable SDO pin!
@@ -274,7 +308,7 @@ void Adafruit_HX8357::begin(uint8_t type) {
     writedata(0x1C);  //VSNR
     writedata(0x83);  //AP
     writedata(0xAA);  //FS
-    
+
     writecommand(HX8357D_SETSTBA);  
     writedata(0x50);  //OPON normal
     writedata(0x50);  //OPON idle
@@ -340,14 +374,14 @@ void Adafruit_HX8357::begin(uint8_t type) {
     writecommand(HX8357_TEARLINE);  // tear line
     writedata(0x00); 
     writedata(0x02);
-    
+
     writecommand(HX8357_SLPOUT); //Exit Sleep
     delay(150);
     
     writecommand(HX8357_DISPON);  // display on
     delay(50);
   } else {
-    Serial.println("unknown type");
+    //Serial.println("unknown type");
   }
 }
 
@@ -372,10 +406,13 @@ void Adafruit_HX8357::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1,
 
 
 void Adafruit_HX8357::pushColor(uint16_t color) {
-  //digitalWrite(_dc, HIGH);
+#if defined (USE_FAST_PINIO)
   *dcport |=  dcpinmask;
-  //digitalWrite(_cs, LOW);
   *csport &= ~cspinmask;
+#else 
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+#endif
 
   if (_sclk == -1)
     SPI.beginTransaction(spi_settings);
@@ -386,8 +423,11 @@ void Adafruit_HX8357::pushColor(uint16_t color) {
   if (_sclk == -1)
     SPI.endTransaction();
 
+#if defined (USE_FAST_PINIO)
   *csport |= cspinmask;
-  //digitalWrite(_cs, HIGH);
+#else 
+  digitalWrite(_cs, HIGH);
+#endif
 }
 
 void Adafruit_HX8357::drawPixel(int16_t x, int16_t y, uint16_t color) {
@@ -397,10 +437,13 @@ void Adafruit_HX8357::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
   setAddrWindow(x,y,x,y);
 
-  //digitalWrite(_dc, HIGH);
+#if defined (USE_FAST_PINIO)
   *dcport |=  dcpinmask;
-  //digitalWrite(_cs, LOW);
   *csport &= ~cspinmask;
+#else 
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+#endif
 
   if (_sclk == -1)
     SPI.beginTransaction(spi_settings);
@@ -423,8 +466,11 @@ void Adafruit_HX8357::drawPixel(int16_t x, int16_t y, uint16_t color) {
   if (_sclk == -1)
     SPI.endTransaction();
 
+#if defined (USE_FAST_PINIO)
   *csport |= cspinmask;
-  //digitalWrite(_cs, HIGH);
+#else 
+  digitalWrite(_cs, HIGH);
+#endif
 }
 
 
@@ -441,10 +487,14 @@ void Adafruit_HX8357::drawFastVLine(int16_t x, int16_t y, int16_t h,
 
   uint8_t hi = color >> 8, lo = color;
 
+#if defined (USE_FAST_PINIO)
   *dcport |=  dcpinmask;
-  //digitalWrite(_dc, HIGH);
   *csport &= ~cspinmask;
-  //digitalWrite(_cs, LOW);
+#else 
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+#endif
+
 
   if (_sclk == -1)
     SPI.beginTransaction(spi_settings);
@@ -457,8 +507,11 @@ void Adafruit_HX8357::drawFastVLine(int16_t x, int16_t y, int16_t h,
   if (_sclk == -1)
     SPI.endTransaction();
 
+#if defined (USE_FAST_PINIO)
   *csport |= cspinmask;
-  //digitalWrite(_cs, HIGH);
+#else 
+  digitalWrite(_cs, HIGH);
+#endif
 }
 
 
@@ -471,10 +524,14 @@ void Adafruit_HX8357::drawFastHLine(int16_t x, int16_t y, int16_t w,
   setAddrWindow(x, y, x+w-1, y);
 
   uint8_t hi = color >> 8, lo = color;
+
+#if defined (USE_FAST_PINIO)
   *dcport |=  dcpinmask;
   *csport &= ~cspinmask;
-  //digitalWrite(_dc, HIGH);
-  //digitalWrite(_cs, LOW);
+#else 
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+#endif
 
   if (_sclk == -1)
     SPI.beginTransaction(spi_settings);
@@ -487,8 +544,11 @@ void Adafruit_HX8357::drawFastHLine(int16_t x, int16_t y, int16_t w,
   if (_sclk == -1)
     SPI.endTransaction();
 
+#if defined (USE_FAST_PINIO)
   *csport |= cspinmask;
-  //digitalWrite(_cs, HIGH);
+#else 
+  digitalWrite(_cs, HIGH);
+#endif
 }
 
 void Adafruit_HX8357::fillScreen(uint16_t color) {
@@ -522,10 +582,13 @@ void Adafruit_HX8357::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   b <<= 3;
   */
 
+#if defined (USE_FAST_PINIO)
   *dcport |=  dcpinmask;
-  //digitalWrite(_dc, HIGH);
   *csport &= ~cspinmask;
-  //digitalWrite(_cs, LOW);
+#else 
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+#endif
 
   if (_sclk == -1)
     SPI.beginTransaction(spi_settings);
@@ -540,8 +603,11 @@ void Adafruit_HX8357::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   if (_sclk == -1)
     SPI.endTransaction();
 
-  //digitalWrite(_cs, HIGH);
+#if defined (USE_FAST_PINIO)
   *csport |= cspinmask;
+#else 
+  digitalWrite(_cs, HIGH);
+#endif
 }
 
 
