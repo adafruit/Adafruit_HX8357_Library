@@ -42,7 +42,7 @@
   typedef volatile uint32_t RwReg;
   #define USE_FAST_PINIO
  #endif
-#elif defined (__AVR__)
+#elif defined (__AVR__) || defined(TEENSYDUINO)
   typedef volatile uint8_t RwReg;
   #define USE_FAST_PINIO
 #elif defined (ESP8266) || defined (ESP32)
