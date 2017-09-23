@@ -37,7 +37,10 @@
   #define USE_FAST_PINIO
  #elif defined(NRF52)
   typedef volatile uint32_t RwReg;
-  #define USE_FAST_PINIO
+  //#define USE_FAST_PINIO
+ #elif defined(ARDUINO_STM32_FEATHER)
+  typedef volatile unsigned int RwReg;
+  //#define USE_FAST_PINIO
  #else
   typedef volatile uint32_t RwReg;
   #define USE_FAST_PINIO
@@ -147,11 +150,8 @@ class Adafruit_HX8357 : public Adafruit_GFX {
 		   int8_t _RST, int8_t _MISO);
   Adafruit_HX8357(int8_t _CS, int8_t _DC, int8_t _RST = -1);
 
-  void     begin(uint8_t),
-           setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1),
-           pushColor(uint16_t color),
+  void     begin(uint8_t type = HX8357D),
            fillScreen(uint16_t color),
-           drawPixel(int16_t x, int16_t y, uint16_t color),
            drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color),
            drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color),
            fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
@@ -160,30 +160,51 @@ class Adafruit_HX8357 : public Adafruit_GFX {
            invertDisplay(boolean i);
   uint16_t color565(uint8_t r, uint8_t g, uint8_t b);
 
+
+  // Required Non-Transaction
+  void      drawPixel(int16_t x, int16_t y, uint16_t color);
+  
+  // Transaction API
+  void      startWrite(void);
+  void      endWrite(void);
+  void      writePixel(int16_t x, int16_t y, uint16_t color);
+  void      writeFillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+  void      writeFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
+  void      writeFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+  
+  // Transaction API not used by GFX
+  void      setAddrWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
+  void      writePixel(uint16_t color);
+  void      writePixels(uint16_t * colors, uint32_t len);
+  void      writeColor(uint16_t color, uint32_t len);
+  void      pushColor(uint16_t color);
+  
+  void      drawRGBBitmap(int16_t x, int16_t y,
+				    uint16_t *pcolors, int16_t w, int16_t h);
+  void     commandList(uint8_t *addr);
+
+ private:
+  uint8_t  tabcolor;
+
+  int32_t  _cs, _dc, _rst, _mosi, _miso, _sclk, _freq;
+
+#if defined (USE_FAST_PINIO)
+  volatile RwReg *misoport, *mosiport, *clkport, *dcport, *csport;
+  uint32_t  misopinmask, mosipinmask, clkpinmask, cspinmask, dcpinmask;
+#endif
+
+  void        writeCommand(uint8_t cmd);
+  void        spiWrite(uint8_t v);
+  uint8_t     spiRead(void);
   /* These are not for current use, 8-bit protocol only! */
-  uint8_t  readdata(void),
-    readcommand8(uint8_t reg, uint8_t index = 0);
+  uint8_t     readdata(void);
+  uint8_t     readcommand8(uint8_t reg, uint8_t index = 0);
   /*
   uint16_t readcommand16(uint8_t);
   uint32_t readcommand32(uint8_t);
   void     dummyclock(void);
   */  
 
-  void     spiwrite(uint8_t),
-    writecommand(uint8_t c),
-    writedata(uint8_t d),
-    commandList(uint8_t *addr);
-  uint8_t  spiread(void);
-
- private:
-  uint8_t  tabcolor;
-
-  int8_t  _cs, _dc, _rst, _mosi, _miso, _sclk;
-
-#if defined (USE_FAST_PINIO)
-  volatile RwReg *mosiport, *clkport, *dcport, *csport;
-  uint32_t  mosipinmask, clkpinmask, cspinmask, dcpinmask;
-#endif
 };
 
 #endif
