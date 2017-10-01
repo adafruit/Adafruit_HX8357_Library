@@ -183,6 +183,8 @@ class Adafruit_HX8357 : public Adafruit_GFX {
 				    uint16_t *pcolors, int16_t w, int16_t h);
   void     commandList(uint8_t *addr);
 
+  uint8_t     readcommand8(uint8_t reg, uint8_t index = 0);
+
  private:
   uint8_t  tabcolor;
 
@@ -198,7 +200,6 @@ class Adafruit_HX8357 : public Adafruit_GFX {
   uint8_t     spiRead(void);
   /* These are not for current use, 8-bit protocol only! */
   uint8_t     readdata(void);
-  uint8_t     readcommand8(uint8_t reg, uint8_t index = 0);
   /*
   uint16_t readcommand16(uint8_t);
   uint32_t readcommand32(uint8_t);
