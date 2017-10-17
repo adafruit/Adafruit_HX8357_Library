@@ -315,7 +315,7 @@ unsigned long testFilledRoundRects() {
 
   tft.fillScreen(HX8357_BLACK);
   start = micros();
-  for(i=min(tft.width(), tft.height()) - 20; i>20; i-=6) {
+  for(i=min(tft.width(), tft.height()) - 20; i>25; i-=6) {
     i2 = i / 2;
     tft.fillRoundRect(cx-i2, cy-i2, i-20, i-20, i/8, tft.color565(100, i/2, 100));
   }
