@@ -154,11 +154,11 @@ static inline uint8_t _avr_spi_read(void) {
 #elif defined(ESP8266)
   #define SPI_DEFAULT_FREQ         16000000
 #elif defined(ESP32)
-  #define SPI_DEFAULT_FREQ         40000000
+  #define SPI_DEFAULT_FREQ         24000000
 #elif defined(RASPI)
-  #define SPI_DEFAULT_FREQ         80000000
+  #define SPI_DEFAULT_FREQ         24000000
 #else
-  #define SPI_DEFAULT_FREQ         32000000
+  #define SPI_DEFAULT_FREQ         24000000
 #endif
 
 #define SPI_BEGIN()             if(_sclk < 0){SPI_OBJECT.begin();}
