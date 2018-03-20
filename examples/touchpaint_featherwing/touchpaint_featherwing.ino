@@ -60,7 +60,7 @@
    #define TFT_DC   11
    #define SD_CS    27
 #endif
-#ifdef ARDUINO_MAX32620FTHR
+#if defined(ARDUINO_MAX32620FTHR) || defined(ARDUINO_MAX32630FTHR)
    #define TFT_DC   P5_4
    #define TFT_CS   P5_3
    #define STMPE_CS P3_3
