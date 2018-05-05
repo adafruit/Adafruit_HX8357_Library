@@ -1,8 +1,13 @@
+# Adafruit HX8357 Arduino Library [![Build Status](https://travis-ci.org/adafruit/Adafruit_HX8357_Library.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit_HX8357_Library)
+
+
 This is a library for the Adafruit HX8357 display products
 
 This library works with the Adafruit 3.5" Breakout
-  ----> http://www.adafruit.com/products/2050
- 
+   * http://www.adafruit.com/products/2050
+And the 3.5" TFT FeatherWing
+   * https://www.adafruit.com/product/3651
+
 Check out the links above for our tutorials and wiring diagrams.
 These displays use SPI to communicate, 4 or 5 pins are required
 to interface (RST is optional).
@@ -14,7 +19,7 @@ products from Adafruit!
 Written by Limor Fried/Ladyada for Adafruit Industries.
 MIT license, all text above must be included in any redistribution
 
-To download. click the DOWNLOADS button in the top right corner, rename the uncompressed folder Adafruit_HX8357. Check that the Adafruit_HX8357 folder contains Adafruit_HX8357.cpp and Adafruit_HX8357.
+To download. click the DOWNLOADS button in the top right corner, rename the uncompressed folder Adafruit_HX8357. Check that the Adafruit_HX8357 folder contains Adafruit_HX8357.cpp and Adafruit_HX8357.h
 
 Place the Adafruit_HX8357 library folder your arduinosketchfolder/libraries/ folder. You may need to create the libraries subfolder if its your first library. Restart the IDE
 
