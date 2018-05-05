@@ -1,17 +1,32 @@
-/***************************************************
-  This is our library for the Adafruit HX8357D Breakout
-  ----> http://www.adafruit.com/products/2050
-
-  Check out the links above for our tutorials and wiring diagrams
-  These displays use SPI to communicate, 4 or 5 pins are required to
-  interface (RST is optional)
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  MIT license, all text above must be included in any redistribution
- ****************************************************/
+/*!
+* @file Adafruit_HX8357.cpp
+*
+* This is the documentation for Adafruit's ILI9341 driver for the
+* Arduino platform. 
+*
+* This library works with the Adafruit 3.5" TFT 320x480 + Touchscreen Breakout
+*    http://www.adafruit.com/products/2050
+*
+* Adafruit TFT FeatherWing - 3.5" 480x320 Touchscreen for Feathers 
+*    https://www.adafruit.com/product/3651
+*
+* These displays use SPI to communicate, 4 or 5 pins are required
+* to interface (RST is optional).
+*
+* Adafruit invests time and resources providing this open source code,
+* please support Adafruit and open-source hardware by purchasing
+* products from Adafruit!
+*
+*
+* This library depends on <a href="https://github.com/adafruit/Adafruit_GFX">
+* Adafruit_GFX</a> being present on your system. Please make sure you have
+* installed the latest version before using this library.
+*
+* Written by Limor "ladyada" Fried for Adafruit Industries.
+*
+* BSD license, all text here must be included in any redistribution.
+*
+*/
 
 #ifndef _ADAFRUIT_HX8357_H
 #define _ADAFRUIT_HX8357_H
@@ -142,6 +157,7 @@
 #define HX8357_WHITE   0xFFFF
 
 
+/// Class to manage hardware interface with HX8357 chipset
 class Adafruit_HX8357 : public Adafruit_GFX {
 
  public:
@@ -181,7 +197,7 @@ class Adafruit_HX8357 : public Adafruit_GFX {
   
   void      drawRGBBitmap(int16_t x, int16_t y,
 				    uint16_t *pcolors, int16_t w, int16_t h);
-  void     commandList(uint8_t *addr);
+  //void     commandList(uint8_t *addr);
 
   uint8_t     readcommand8(uint8_t reg, uint8_t index = 0);
 
