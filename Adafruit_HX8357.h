@@ -35,7 +35,7 @@
  #if defined(TEENSYDUINO)
   typedef volatile uint8_t RwReg;
   #define USE_FAST_PINIO
- #elif defined(NRF52)
+ #elif defined(NRF52) || defined(ARDUINO_MAXIM)
   typedef volatile uint32_t RwReg;
   //#define USE_FAST_PINIO
  #elif defined(ARDUINO_STM32_FEATHER)
