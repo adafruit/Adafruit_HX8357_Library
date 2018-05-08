@@ -606,9 +606,7 @@ void Adafruit_HX8357::setAddrWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t
     @param   color 16-bits of 5-6-5 color data
 /**************************************************************************/
 void Adafruit_HX8357::pushColor(uint16_t color) {
-  startWrite();
   SPI_WRITE16(color);
-  endWrite();
 }
 
 /**************************************************************************/
