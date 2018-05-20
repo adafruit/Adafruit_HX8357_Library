@@ -106,11 +106,7 @@
  * Hardware SPI Macros
  * */
 
-#ifndef ESP32
-    #define SPI_OBJECT  SPI         ///< Default SPI hardware peripheral
-#else
-    #define SPI_OBJECT  _spi        ///< Default SPI hardware peripheral
-#endif
+#define SPI_OBJECT  SPI         ///< Default SPI hardware peripheral
 
 #if defined (__AVR__) ||  defined(TEENSYDUINO) ||  defined(ARDUINO_ARCH_STM32F1)
     #define HSPI_SET_CLOCK() SPI_OBJECT.setClockDivider(SPI_CLOCK_DIV2);
