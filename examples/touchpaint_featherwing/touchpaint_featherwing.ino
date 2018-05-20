@@ -30,18 +30,6 @@
    #define TFT_DC   33
    #define SD_CS    14
 #endif
-#ifdef __AVR_ATmega32U4__
-   #define STMPE_CS 6
-   #define TFT_CS   9
-   #define TFT_DC   10
-   #define SD_CS    5
-#endif
-#ifdef ARDUINO_SAMD_FEATHER_M0
-   #define STMPE_CS 6
-   #define TFT_CS   9
-   #define TFT_DC   10
-   #define SD_CS    5
-#endif
 #ifdef TEENSYDUINO
    #define TFT_DC   10
    #define TFT_CS   4
@@ -65,6 +53,14 @@
    #define TFT_CS   P5_3
    #define STMPE_CS P3_3
    #define SD_CS    P3_2
+#endif
+
+// Anything else!
+#if defined (__AVR_ATmega32U4__) || defined(ARDUINO_SAMD_FEATHER_M0) || defined (__AVR_ATmega328P__) || defined(ARDUINO_SAMD_ZERO) || defined(__SAMD51__) || defined(__SAM3X8E__)
+   #define STMPE_CS 6
+   #define TFT_CS   9
+   #define TFT_DC   10
+   #define SD_CS    5
 #endif
 
 #define TFT_RST -1
