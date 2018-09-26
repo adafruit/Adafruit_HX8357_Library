@@ -9,14 +9,14 @@
 
 #ifdef ESP8266
    #define STMPE_CS  16
-   #define  tft_CS    0
-   #define  tft_DC   15
+   #define  TFT_CS    0
+   #define  TFT_DC   15
    #define SD_CS      2
 #endif
 #ifdef ESP32
    #define STMPE_CS  32
-   #define  tft_CS   15
-   #define  tft_DC   33
+   #define  TFT_CS   15
+   #define  TFT_DC   33
    #define SD_CS     14
 #endif
 #ifdef TEENSYDUINO
@@ -44,10 +44,10 @@
    #define SD_CS    P3_2
 #endif
 
-#define  tft_RST -1
+#define  TFT_RST -1
 
 // Use hardware SPI and the above for CS/DC
-Adafruit_HX8357  tft = Adafruit_HX8357( tft_CS,  tft_DC,  tft_RST);
+Adafruit_HX8357  tft = Adafruit_HX8357( TFT_CS,  TFT_DC,  TFT_RST);
 Adafruit_STMPE610 ts = Adafruit_STMPE610(STMPE_CS);
 
 // This is calibration data for the raw touch data to the screen coordinates
@@ -352,7 +352,7 @@ void processMenu1() {
 
         initializeButtons(Menu1Buttons, Menu1Colors, Menu1Labels, MENU1_BTN_CNT);
 
-        msg = "Returned from Menu2 ";
+        msg = "Returned from Menu 2";
         Serial.println(msg);
         setTextColorIndex(0);
         setTextSizeIndex(0);
@@ -385,3 +385,4 @@ void loop() {
     processMenu1();
    
 }
+
