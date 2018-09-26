@@ -20,28 +20,28 @@
    #define SD_CS     14
 #endif
 #ifdef TEENSYDUINO
-   #define TFT_DC   10
-   #define TFT_CS    4
-   #define STMPE_CS  3
-   #define SD_CS     8
+   #define TFT_DC    10
+   #define TFT_CS     4
+   #define STMPE_CS   3
+   #define SD_CS      8
 #endif
 #ifdef ARDUINO_STM32_FEATHER
-   #define TFT_DC   PB4
-   #define TFT_CS   PA15
-   #define STMPE_CS PC7
-   #define SD_CS    PC5
+   #define TFT_DC    PB4
+   #define TFT_CS    PA15
+   #define STMPE_CS  PC7
+   #define SD_CS     PC5
 #endif
 #ifdef ARDUINO_FEATHER52
-   #define STMPE_CS 30
-   #define TFT_CS   13
-   #define TFT_DC   11
-   #define SD_CS    27
+   #define STMPE_CS  30
+   #define TFT_CS    13
+   #define TFT_DC    11
+   #define SD_CS     27
 #endif
 #if defined(ARDUINO_MAX32620FTHR) || defined(ARDUINO_MAX32630FTHR)
-   #define TFT_DC   P5_4
-   #define TFT_CS   P5_3
-   #define STMPE_CS P3_3
-   #define SD_CS    P3_2
+   #define TFT_DC    P5_4
+   #define TFT_CS    P5_3
+   #define STMPE_CS  P3_3
+   #define SD_CS     P3_2
 #endif
 
 #define  TFT_RST -1
