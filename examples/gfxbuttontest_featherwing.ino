@@ -9,21 +9,21 @@
 
 #ifdef ESP8266
    #define STMPE_CS  16
-   #define  TFT_CS    0
-   #define  TFT_DC   15
+   #define TFT_CS     0
+   #define TFT_DC    15
    #define SD_CS      2
 #endif
 #ifdef ESP32
    #define STMPE_CS  32
-   #define  TFT_CS   15
-   #define  TFT_DC   33
+   #define TFT_CS    15
+   #define TFT_DC    33
    #define SD_CS     14
 #endif
 #ifdef TEENSYDUINO
    #define TFT_DC   10
-   #define TFT_CS   4
-   #define STMPE_CS 3
-   #define SD_CS    8
+   #define TFT_CS    4
+   #define STMPE_CS  3
+   #define SD_CS     8
 #endif
 #ifdef ARDUINO_STM32_FEATHER
    #define TFT_DC   PB4
@@ -385,4 +385,3 @@ void loop() {
     processMenu1();
    
 }
-
