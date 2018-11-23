@@ -58,7 +58,7 @@ void setup(void) {
   Serial.begin(115200);
   Serial.println(F("Touch Paint!"));
   
-  tft.begin(HX8357D);
+  tft.begin();
   tft.fillScreen(HX8357_BLACK);
   
   // make the color selection boxes

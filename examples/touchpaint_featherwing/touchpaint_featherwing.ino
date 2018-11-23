@@ -65,6 +65,7 @@
 
 #define TFT_RST -1
 
+// Init screen on hardware SPI, HX8357D type:
 Adafruit_HX8357 tft = Adafruit_HX8357(TFT_CS, TFT_DC, TFT_RST);
 Adafruit_STMPE610 ts = Adafruit_STMPE610(STMPE_CS);
 
@@ -92,9 +93,9 @@ void setup() {
   }
   Serial.println("Touchscreen started");
   
-  tft.begin(HX8357D);
+  tft.begin();
   tft.fillScreen(HX8357_BLACK);
-    // make the color selection boxes
+  // make the color selection boxes
   tft.fillRect(0, 0, BOXSIZE, BOXSIZE, HX8357_RED);
   tft.fillRect(BOXSIZE, 0, BOXSIZE, BOXSIZE, HX8357_YELLOW);
   tft.fillRect(BOXSIZE*2, 0, BOXSIZE, BOXSIZE, HX8357_GREEN);

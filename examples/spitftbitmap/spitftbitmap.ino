@@ -34,7 +34,7 @@ Adafruit_HX8357 tft = Adafruit_HX8357(TFT_CS, TFT_DC);
 void setup(void) {
   Serial.begin(9600);
 
-  tft.begin(HX8357D);
+  tft.begin();
   tft.fillScreen(HX8357_BLUE);
   
   Serial.print("Initializing SD card...");

@@ -34,7 +34,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("HX8357D Test!"); 
 
-  tft.begin(HX8357D);
+  tft.begin();
 
   // read diagnostics (optional but can help debug problems)
   uint8_t x = tft.readcommand8(HX8357_RDPOWMODE);
