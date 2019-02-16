@@ -65,7 +65,7 @@
 #elif defined(RASPI)
   #define SPI_DEFAULT_FREQ 24000000
 #else
-  #define SPI_DEFAULT_FREQ 24000000
+#define SPI_DEFAULT_FREQ 24000000   ///< The default SPI frequency
 #endif
 
 // CONSTRUCTORS, DESTRUCTOR ------------------------------------------------
