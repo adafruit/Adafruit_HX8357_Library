@@ -97,7 +97,8 @@ Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t mosi,
 }
 
 /*!
-    @brief   Constructor for Adafruit_HX8357 cisplays, using hardware SPI.
+    @brief   Constructor for Adafruit_HX8357 cisplays, using the default
+             hardware SPI interface.
     @param   cs
              Chip select pin (using Arduino pin numbering).
     @param   dc
@@ -106,15 +107,36 @@ Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t mosi,
              Reset pin (Arduino pin numbering, optional, pass -1 if unused).
     @param   type
              Display type, HX8357D (default if unspecified) or HX8357B.
-    @param   spi
-             SPI peripheral to use (will use primary SPI if unspecified)
     @return  Adafruit_HX8357 object.
     @note    Call the object's begin() function before use.
 */
 Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t rst,
-  uint8_t type, SPIClass *spi) : Adafruit_SPITFT(HX8357_TFTWIDTH,
+  uint8_t type) : Adafruit_SPITFT(HX8357_TFTWIDTH,
+  HX8357_TFTHEIGHT, cs, dc, rst), displayType(type) {
+}
+
+#if !defined(ESP8266)
+/*!
+    @brief   Constructor for Adafruit_HX8357 cisplays, using an arbitrary
+             SPI interface.
+    @param   spi
+             SPI peripheral to use.
+    @param   cs
+             Chip select pin (using Arduino pin numbering).
+    @param   dc
+             Data/Command pin (using Arduino pin numbering).
+    @param   rst
+             Reset pin (Arduino pin numbering, optional, pass -1 if unused).
+    @param   type
+             Display type, HX8357D (default if unspecified) or HX8357B.
+    @return  Adafruit_HX8357 object.
+    @note    Call the object's begin() function before use.
+*/
+Adafruit_HX8357::Adafruit_HX8357(SPIClass *spi, int8_t cs, int8_t dc,
+  int8_t rst, uint8_t type) : Adafruit_SPITFT(HX8357_TFTWIDTH,
   HX8357_TFTHEIGHT, spi, cs, dc, rst), displayType(type) {
 }
+#endif // end !ESP8266
 
 /*!
     @brief   Destructor for Adafruit_HX8357 object.

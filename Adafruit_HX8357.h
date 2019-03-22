@@ -127,7 +127,11 @@ class Adafruit_HX8357 : public Adafruit_SPITFT {
     Adafruit_HX8357(int8_t _CS, int8_t _DC, int8_t _MOSI, int8_t _SCLK,
       int8_t _RST, int8_t _MISO, uint8_t type = HX8357D);
     Adafruit_HX8357(int8_t _CS, int8_t _DC, int8_t _RST = -1,
-      uint8_t type = HX8357D, SPIClass *spi = &SPI);
+      uint8_t type = HX8357D);
+#if !defined(ESP8266)
+    Adafruit_HX8357(SPIClass *spi, int8_t _CS, int8_t _DC, int8_t _RST = -1,
+      uint8_t type = HX8357D);
+#endif // end !ESP8266
     ~Adafruit_HX8357(void);
 
     void    begin(uint32_t freq = 0),
