@@ -184,7 +184,7 @@ static const uint8_t PROGMEM
     HX8357_SWRESET, 0x80 + 10/5, // Soft reset, then delay 10 ms
     HX8357D_SETC, 3,
       0xFF, 0x83, 0x57,
-    0xFF, 0x80 + 300/5,          // No command, just delay 300 ms
+    0xFF, 0x80 + 500/5,          // No command, just delay 300 ms
     HX8357_SETRGB, 4,
       0x80, 0x00, 0x06, 0x06,    // 0x80 enables SDO pin (0x00 disables)
     HX8357D_SETCOM, 1,
@@ -263,20 +263,23 @@ void Adafruit_HX8357::begin(uint32_t freq) {
   if(!freq) freq = SPI_DEFAULT_FREQ;
   initSPI(freq);
 
-  startWrite();
   const uint8_t *addr = (displayType == HX8357B) ? initb : initd;
   uint8_t        cmd, x, numArgs;
   while((cmd = pgm_read_byte(addr++)) > 0) { // '0' command ends list
-    if(cmd != 0xFF) writeCommand(cmd);       // '255' is ignored
-    x       = pgm_read_byte(addr++);
+    x = pgm_read_byte(addr++);
     numArgs = x & 0x7F;
-    if(x & 0x80) {        // If high bit set...
+    if (cmd != 0xFF) { // '255' is ignored
+      if (x & 0x80) {  // If high bit set, numArgs is a delay time
+        sendCommand(cmd);
+      } else {
+        sendCommand(cmd, addr, numArgs);
+        addr += numArgs;
+      }
+    }
+    if (x & 0x80) {       // If high bit set...
       delay(numArgs * 5); // numArgs is actually a delay time (5ms units)
-    } else {              // Otherwise, issue args to command...
-      while(numArgs--) spiWrite(pgm_read_byte(addr++));
     }
   }
-  endWrite();
 
   _width  = HX8357_TFTWIDTH;  // Screen dimensions for default rotation 0
   _height = HX8357_TFTHEIGHT;
@@ -316,10 +319,7 @@ void Adafruit_HX8357::setRotation(uint8_t m) {
       break;
   }
 
-  startWrite();
-  writeCommand(HX8357_MADCTL);
-  spiWrite(m);
-  endWrite();
+  sendCommand(HX8357_MADCTL, &m, 1);
 }
 
 /*!
@@ -329,9 +329,7 @@ void Adafruit_HX8357::setRotation(uint8_t m) {
     @return  None (void).
 */
 void Adafruit_HX8357::invertDisplay(boolean invert) {
-  startWrite();
-  writeCommand(invert ? HX8357_INVON : HX8357_INVOFF);
-  endWrite();
+  sendCommand(invert ? HX8357_INVON : HX8357_INVOFF);
 }
 
 /*!
