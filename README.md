@@ -1,4 +1,4 @@
-# Adafruit HX8357 Arduino Library [![Build Status](https://travis-ci.org/adafruit/Adafruit_HX8357_Library.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit_HX8357_Library)
+# Adafruit HX8357 Arduino Library [![Build Status](https://travis-ci.com/adafruit/Adafruit_HX8357_Library.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_HX8357_Library)
 
 This is a library for the Adafruit HX8357 display products
 
