@@ -181,7 +181,7 @@ static const uint8_t PROGMEM
     HX8357_DISPON, 0x80 +  10/5, // Main screen turn on, delay 10 ms
     0                            // END OF COMMAND LIST
   }, initd[] = {
-    HX8357_SWRESET, 0x80 + 10/5, // Soft reset, then delay 10 ms
+    HX8357_SWRESET, 0x80 + 100/5, // Soft reset, then delay 10 ms
     HX8357D_SETC, 3,
       0xFF, 0x83, 0x57,
     0xFF, 0x80 + 500/5,          // No command, just delay 300 ms
@@ -294,7 +294,6 @@ void Adafruit_HX8357::begin(uint32_t freq) {
     @return  None (void).
 */
 void Adafruit_HX8357::setRotation(uint8_t m) {
-
   rotation = m & 3; // can't be higher than 3
   switch(rotation) {
     case 0:
