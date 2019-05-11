@@ -105,9 +105,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9bb68ea019a1363ae309c1ab18c92ce1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___h_x8357.html#a9bb68ea019a1363ae309c1ab18c92ce1">setAddrWindow</a> (uint16_t x, uint16_t y, uint16_t w, uint16_t h)</td></tr>
 <tr class="memdesc:a9bb68ea019a1363ae309c1ab18c92ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the "address window" - the rectangle we will write to graphics RAM with the next chunk of SPI data writes. The HX8357 will automatically wrap the data as each row is filled.  <a href="#a9bb68ea019a1363ae309c1ab18c92ce1">More...</a><br /></td></tr>
 <tr class="separator:a9bb68ea019a1363ae309c1ab18c92ce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16a37e82e5c8350ede1e8ce3a8225077"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___h_x8357.html#a16a37e82e5c8350ede1e8ce3a8225077">readcommand8</a> (uint8_t command, uint8_t index=0)</td></tr>
-<tr class="memdesc:a16a37e82e5c8350ede1e8ce3a8225077"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read 8 bits of data from HX8357 configuration memory (not RAM). This is highly undocumented/supported and should be avoided, function is only included because some of the examples use it.  <a href="#a16a37e82e5c8350ede1e8ce3a8225077">More...</a><br /></td></tr>
-<tr class="separator:a16a37e82e5c8350ede1e8ce3a8225077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class to manage hardware interface with HX8357 chipset. </p>
@@ -451,44 +448,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>None (void). </dd></dl>
-
-</div>
-</div>
-<a id="a16a37e82e5c8350ede1e8ce3a8225077"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16a37e82e5c8350ede1e8ce3a8225077">&#9670;&nbsp;</a></span>readcommand8()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t Adafruit_HX8357::readcommand8 </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>command</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>index</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Read 8 bits of data from HX8357 configuration memory (not RAM). This is highly undocumented/supported and should be avoided, function is only included because some of the examples use it. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">command</td><td>The command register to read data from. </td></tr>
-    <tr><td class="paramname">index</td><td>The byte index into the command to read from. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Unsigned 8-bit data read from HX8357 register. </dd></dl>
 
 </div>
 </div>

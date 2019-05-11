@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['readcommand8',['readcommand8',['../class_adafruit___h_x8357.html#a16a37e82e5c8350ede1e8ce3a8225077',1,'Adafruit_HX8357']]]
+  ['setaddrwindow',['setAddrWindow',['../class_adafruit___h_x8357.html#a9bb68ea019a1363ae309c1ab18c92ce1',1,'Adafruit_HX8357']]],
+  ['setrotation',['setRotation',['../class_adafruit___h_x8357.html#a402de62327e0b3d6613c895ebe68a93d',1,'Adafruit_HX8357']]]
 ];

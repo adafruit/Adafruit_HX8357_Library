@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['setaddrwindow',['setAddrWindow',['../class_adafruit___h_x8357.html#a9bb68ea019a1363ae309c1ab18c92ce1',1,'Adafruit_HX8357']]],
-  ['setrotation',['setRotation',['../class_adafruit___h_x8357.html#a402de62327e0b3d6613c895ebe68a93d',1,'Adafruit_HX8357']]],
-  ['spi_5fdefault_5ffreq',['SPI_DEFAULT_FREQ',['../_adafruit___h_x8357_8cpp.html#a0715902d9c5601117a540444545d8e38',1,'Adafruit_HX8357.cpp']]]
+  ['_7eadafruit_5fhx8357',['~Adafruit_HX8357',['../class_adafruit___h_x8357.html#a652e291cefac42fa85384ab55606aa5c',1,'Adafruit_HX8357']]]
 ];
