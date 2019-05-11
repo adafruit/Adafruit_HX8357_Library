@@ -357,27 +357,3 @@ void Adafruit_HX8357::setAddrWindow(
   SPI_WRITE16(y2);
   writeCommand(HX8357_RAMWR); // Write to RAM
 }
-
-/*!
-    @brief   Read 8 bits of data from HX8357 configuration memory (not RAM).
-             This is highly undocumented/supported and should be avoided,
-             function is only included because some of the examples use it.
-    @param   command
-             The command register to read data from.
-    @param   index
-             The byte index into the command to read from.
-    @return  Unsigned 8-bit data read from HX8357 register.
-*/
-/**************************************************************************/
-uint8_t Adafruit_HX8357::readcommand8(uint8_t command, uint8_t index) {
-   uint8_t result;
-   startWrite();
-   SPI_DC_LOW();
-   spiWrite(command);
-   SPI_DC_HIGH();
-   do {
-     result = spiRead();
-   } while(index--); // Discard bytes up to index'th
-   endWrite();
-   return result;
-}

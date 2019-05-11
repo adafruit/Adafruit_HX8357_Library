@@ -138,7 +138,6 @@ class Adafruit_HX8357 : public Adafruit_SPITFT {
             setRotation(uint8_t r),
             invertDisplay(boolean i),
             setAddrWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
-    uint8_t readcommand8(uint8_t command, uint8_t index = 0);
   private:
     uint8_t displayType; // HX8357D vs HX8357B
 };
