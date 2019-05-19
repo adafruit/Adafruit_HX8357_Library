@@ -255,7 +255,7 @@ void Adafruit_HX8357::begin(uint32_t freq) {
   if(freq == HX8357D) {
     displayType = freq;
     freq        = 0; // Use default SPI frequency
-  } else if(HX8357B) {
+  } else if(freq == HX8357B) {
     displayType = freq;
     freq        = 0; // Use default SPI frequency
   }
