@@ -33,7 +33,7 @@
    #define STMPE_CS PC7
    #define SD_CS    PC5
   
-#elif defined ARDUINO_FEATHER52
+#elif defined ARDUINO_NRF52832_FEATHER
    #define STMPE_CS 30
    #define TFT_CS   13
    #define TFT_DC   11
@@ -46,7 +46,8 @@
    #define SD_CS    P3_2
 
 // Something else!
-#elif  defined (__AVR_ATmega32U4__) || defined(ARDUINO_SAMD_FEATHER_M0) || defined (__AVR_ATmega328P__) || defined(ARDUINO_SAMD_ZERO) || defined(__SAMD51__) || defined(__SAM3X8E__) || defined(ARDUINO_NRF52_FEATHER)  
+#elif  defined (__AVR_ATmega32U4__) || defined(ARDUINO_SAMD_FEATHER_M0) || defined (__AVR_ATmega328P__) || \
+defined(ARDUINO_SAMD_ZERO) || defined(__SAMD51__) || defined(__SAM3X8E__) || defined(ARDUINO_NRF52840_FEATHER)
    #define STMPE_CS 6
    #define TFT_CS   9
    #define TFT_DC   10
