@@ -5,7 +5,7 @@
  *
  * @section intro_sec Introduction
  *
- * This is the documentation for Adafruit's ILI9341 driver for the Arduino
+ * This is the documentation for Adafruit's HX8357 driver for the Arduino
  * platform. 
  *
  * This library works with the Adafruit 3.5" TFT 320x480 + Touchscreen Breakout
@@ -71,7 +71,7 @@
 // CONSTRUCTORS, DESTRUCTOR ------------------------------------------------
 
 /*!
-    @brief   Constructor for Adafruit_HX8357 cisplays, using software
+    @brief   Constructor for Adafruit_HX8357 displays, using software
              (bitbang) SPI.
     @param   cs
              Chip select pin (using Arduino pin numbering).
@@ -97,7 +97,7 @@ Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t mosi,
 }
 
 /*!
-    @brief   Constructor for Adafruit_HX8357 cisplays, using the default
+    @brief   Constructor for Adafruit_HX8357 displays, using the default
              hardware SPI interface.
     @param   cs
              Chip select pin (using Arduino pin numbering).
@@ -117,7 +117,7 @@ Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t rst,
 
 #if !defined(ESP8266)
 /*!
-    @brief   Constructor for Adafruit_HX8357 cisplays, using an arbitrary
+    @brief   Constructor for Adafruit_HX8357 displays, using an arbitrary
              SPI interface.
     @param   spi
              SPI peripheral to use.
@@ -137,6 +137,29 @@ Adafruit_HX8357::Adafruit_HX8357(SPIClass *spi, int8_t cs, int8_t dc,
   HX8357_TFTHEIGHT, spi, cs, dc, rst), displayType(type) {
 }
 #endif // end !ESP8266
+
+
+/**************************************************************************/
+/*!
+    @brief  Constructor for Adafruit_HX8357 displays, using parallel
+            interface.
+    @param  busWidth  If tft16 (enumeration in Adafruit_SPITFT.h), is a
+                      16-bit interface, else 8-bit.
+    @param  d0        Data pin 0 (MUST be a byte- or word-aligned LSB of a
+                      PORT register -- pins 1-n are extrapolated from this).
+    @param  wr        Write strobe pin # (required).
+    @param  dc        Data/Command pin # (required).
+    @param  cs        Chip select pin # (optional, pass -1 if unused and CS
+                      is tied to GND).
+    @param  rst       Reset pin # (optional, pass -1 if unused).
+    @param  rd        Read strobe pin # (optional, pass -1 if unused).
+*/
+/**************************************************************************/
+Adafruit_HX8357::Adafruit_HX8357(tftBusWidth busWidth,
+  int8_t d0, int8_t wr, int8_t dc, int8_t cs, int8_t rst, int8_t rd) :
+  Adafruit_SPITFT(HX8357_TFTWIDTH, HX8357_TFTHEIGHT, busWidth,
+    d0, wr, dc, cs, rst, rd) {
+}
 
 /*!
     @brief   Destructor for Adafruit_HX8357 object.
