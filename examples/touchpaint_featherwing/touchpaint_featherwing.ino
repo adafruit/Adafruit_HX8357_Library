@@ -44,7 +44,7 @@
 #endif
 #ifdef ARDUINO_NRF52832_FEATHER
    #define STMPE_CS 30
-   #define TFT_CS   13
+   #define TFT_CS   31
    #define TFT_DC   11
    #define SD_CS    27
 #endif
