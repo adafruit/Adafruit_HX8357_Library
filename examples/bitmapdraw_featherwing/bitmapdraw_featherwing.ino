@@ -102,7 +102,7 @@ void setup() {
   }
   Serial.println("OK!");
 
-  bmpDraw("/adabot.bmp", 0, 0);
+  bmpDraw((char *)"/adabot.bmp", 0, 0);
  
   // select the current color 'red'
   currentcolor = HX8357_RED;
@@ -162,7 +162,8 @@ void bmpDraw(char *filename, uint8_t x, uint16_t y) {
   Serial.println('\'');
 
   // Open requested file on SD card
-  if ((bmpFile = SD.open(filename)) == NULL) {
+  bmpFile = SD.open(filename);
+  if (bmpFile == NULL) {
     Serial.print(F("File not found"));
     return;
   }

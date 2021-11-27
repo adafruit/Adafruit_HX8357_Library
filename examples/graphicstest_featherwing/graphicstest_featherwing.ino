@@ -183,7 +183,7 @@ tft.println(F("Either the well was very deep, or she fell very slowly, for she h
 }
 
 unsigned long testLines(uint16_t color) {
-  unsigned long start, t;
+  unsigned long start;
   int           x1, y1, x2, y2,
                 w = tft.width(),
                 h = tft.height();

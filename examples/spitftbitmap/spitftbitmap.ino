@@ -43,7 +43,7 @@ void setup(void) {
   }
   Serial.println("OK!");
 
-  bmpDraw("jumpers.bmp", 0, 0);
+  bmpDraw((char *)"jumpers.bmp", 0, 0);
 }
 
 void loop() {
@@ -82,7 +82,8 @@ void bmpDraw(char *filename, uint8_t x, uint16_t y) {
   Serial.println('\'');
 
   // Open requested file on SD card
-  if ((bmpFile = SD.open(filename)) == NULL) {
+  bmpFile = SD.open(filename);
+  if (bmpFile == NULL) {
     Serial.print(F("File not found"));
     return;
   }
