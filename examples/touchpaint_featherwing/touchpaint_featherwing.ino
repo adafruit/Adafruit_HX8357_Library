@@ -72,7 +72,7 @@ Adafruit_STMPE610 ts = Adafruit_STMPE610(STMPE_CS);
 // Size of the color selection boxes and the paintbrush size
 #define BOXSIZE 40
 #define PENRADIUS 3
-int oldcolor, currentcolor;
+uint16_t oldcolor, currentcolor;
 
 
 void setup() {

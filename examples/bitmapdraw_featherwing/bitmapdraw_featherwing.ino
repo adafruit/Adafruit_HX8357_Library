@@ -139,7 +139,7 @@ void loop(void) {
 
 #define BUFFPIXEL 20
 
-void bmpDraw(char *filename, uint8_t x, uint16_t y) {
+void bmpDraw(char *filename, int16_t x, int16_t y) {
 
   File     bmpFile;
   int      bmpWidth, bmpHeight;   // W+H in pixels
