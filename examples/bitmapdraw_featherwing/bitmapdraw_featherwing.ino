@@ -163,7 +163,7 @@ void bmpDraw(char *filename, int16_t x, int16_t y) {
 
   // Open requested file on SD card
   bmpFile = SD.open(filename);
-  if (bmpFile == NULL) {
+  if (!bmpFile) {
     Serial.print(F("File not found"));
     return;
   }
