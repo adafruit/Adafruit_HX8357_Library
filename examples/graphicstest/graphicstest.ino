@@ -151,7 +151,7 @@ tft.println(F("Either the well was very deep, or she fell very slowly, for she h
 }
 
 unsigned long testLines(uint16_t color) {
-  unsigned long start, t;
+  unsigned long start;
   int           x1, y1, x2, y2,
                 w = tft.width(),
                 h = tft.height();
@@ -164,8 +164,6 @@ unsigned long testLines(uint16_t color) {
   for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
   x2    = w - 1;
   for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  t     = micros() - start; // fillScreen doesn't count against timing
-
 
   return micros() - start;
 }
