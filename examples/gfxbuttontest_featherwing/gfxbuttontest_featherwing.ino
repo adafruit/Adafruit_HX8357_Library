@@ -2,11 +2,13 @@
  * gfxbuttontest_featherwing
  */
 
-#include <SPI.h>
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_HX8357.h>
-#include <Adafruit_STMPE610.h>
 
+// If using the rev 1 with STMPE resistive touch screen controller uncomment this line:
+//#include <Adafruit_STMPE610.h>
+// If using the rev 2 with TSC2007, uncomment this line:
+#include <Adafruit_TSC2007.h>
 
 #ifdef ESP8266
    #define STMPE_CS 16
@@ -53,14 +55,31 @@
 
 // Use hardware SPI and the above for CS/DC
 Adafruit_HX8357  tft = Adafruit_HX8357( TFT_CS,  TFT_DC,  TFT_RST);
-Adafruit_STMPE610 ts = Adafruit_STMPE610(STMPE_CS);
+
+#if defined(_ADAFRUIT_STMPE610H_)
+  Adafruit_STMPE610 ts = Adafruit_STMPE610(STMPE_CS);
+#elif defined(_ADAFRUIT_TSC2007_H)
+  // If you're using the TSC2007 there is no CS pin needed, so instead its an IRQ!
+  #define TSC_IRQ STMPE_CS
+  Adafruit_TSC2007 ts = Adafruit_TSC2007();             // newer rev 2 touch contoller
+#else
+  #error("You must have either STMPE or TSC2007 headers included!")
+#endif
 
 // This is calibration data for the raw touch data to the screen coordinates
-// For rotation 1, these put the buttons at the top of the screen
-#define TS_MINX 3800
-#define TS_MAXX 100
-#define TS_MINY 100
-#define TS_MAXY 3750
+// For STMPE811/STMPE610
+#define STMPE_TS_MINX 3800
+#define STMPE_TS_MAXX 100
+#define STMPE_TS_MINY 100
+#define STMPE_TS_MAXY 3750
+// For TSC2007
+#define TSC_TS_MINX 300
+#define TSC_TS_MAXX 3800
+#define TSC_TS_MINY 185
+#define TSC_TS_MAXY 3700
+// we will assign the calibration values on init
+int16_t min_x, max_x, min_y, max_y;
+
 
 // Redefine original colors, add additional colors to match those available with the ILI9341 library
 #define HX8357_BLACK       0x0000  ///<   0,   0,   0
@@ -198,77 +217,85 @@ void tftCenterPrint(String str) {
             
 //--------------------------------------------------------------------------------
 void setup() {
-    Serial.begin(115200);
-    delay(100);
-    Serial.println("");
+  Serial.begin(115200);
+  delay(100);
+  Serial.println("");
 
-    // if the touchscreen returns true, assume we have the  tft device
-    if (!ts.begin())
-        return;
+  #if defined(_ADAFRUIT_STMPE610H_)
+    if (!ts.begin()) {
+      Serial.println("Couldn't start STMPE touchscreen controller");
+      while (1) delay(100);
+    }
+    min_x = STMPE_TS_MINX; max_x = STMPE_TS_MAXX;
+    min_y = STMPE_TS_MINY; max_y = STMPE_TS_MAXY;
+  #else
+    if (! ts.begin(0x48, &Wire)) {
+      Serial.println("Couldn't start TSC2007 touchscreen controller");
+      while (1) delay(100);
+    }
+    min_x = TSC_TS_MINX; max_x = TSC_TS_MAXX;
+    min_y = TSC_TS_MINY; max_y = TSC_TS_MAXY;
+    pinMode(TSC_IRQ, INPUT);
+  #endif
         
-    Serial.println("Touchscreen started");
-     tft.begin();
-     tft.setRotation(1);
-     tft.setTextWrap(false);
-                              
-    initializeButtons(Menu1Buttons, Menu1Colors, Menu1Labels, MENU1_BTN_CNT);
+  Serial.println("Touchscreen started");
+  tft.begin();
+  tft.setRotation(1);
+  tft.setTextWrap(false);
+                            
+  initializeButtons(Menu1Buttons, Menu1Colors, Menu1Labels, MENU1_BTN_CNT);
 }
 
 //--------------------------------------------------------------------------------
 int  tftButtonRelease(Adafruit_GFX_Button menuButtons[], int menuButtonCount) {
-    int btn = -1;
-    TS_Point p;
-    
-    if (ts.bufferSize()) 
-    {
-        p = ts.getPoint(); 
-    } 
-    else 
-    {
-        // this is our way of tracking touch 'release'!
-        p.x = p.y = p.z = -1;
-    }
+  int btn = -1;
+  TS_Point p;
   
-    // Scale from ~0->4000 to  tft.width using the calibration #'s
-    if (p.z != -1) 
-    {
-        int16_t px = p.x;
-        int16_t py = p.y;
-        p.x = map(py, TS_MINY, TS_MAXY, 0,  tft.width());
-        p.y = map(px, TS_MINX, TS_MAXX, 0,  tft.height()); 
+  p = ts.getPoint(); 
+  Serial.print("X = "); Serial.print(p.x);
+  Serial.print("\tY = "); Serial.print(p.y);
+  Serial.print("\tPressure = "); Serial.print(p.z);
+
+  if (((p.x == 0) && (p.y == 0)) || (p.z < 10)) {
+    // this is our way of tracking touch 'release'!
+      p.x = p.y = p.z = -1;
+  }
+
+  // Scale from ~0->4000 to  tft.width using the calibration #'s
+  if (p.z != -1) {
+    int py = map(p.x, max_x, min_x, 0, tft.height());  // rotate / swap x&y
+    int px = map(p.y, min_y, max_y, 0, tft.width());
+
+    p.x = px;
+    p.y = py;
+  }
+  Serial.print(" -> "); Serial.print(p.x); Serial.print(", "); Serial.println(p.y);
+
+  // go thru all the buttons, checking if they were pressed
+  for (uint8_t b=0; b<menuButtonCount; b++) {
+      if (menuButtons[b].contains(p.x, p.y)) 
+      {
+        Serial.print("Pressing: "); Serial.println(b);
+        menuButtons[b].press(true);  // tell the button it is pressed
+      } else {
+        menuButtons[b].press(false);  // tell the button it is NOT pressed
+      }
+  }
+  
+  // now we can ask the buttons if their state has changed
+  for (uint8_t b=0; b<menuButtonCount; b++) {
+    if (menuButtons[b].justReleased()) {
+      Serial.print("Released: "); Serial.println(b);
+      menuButtons[b].drawButton();  // draw normal
+      btn = b;
     }
 
-    // go thru all the buttons, checking if they were pressed
-    for (uint8_t b=0; b<menuButtonCount; b++) 
-    {
-        if (menuButtons[b].contains(p.x, p.y)) 
-        {
-          Serial.print("Pressing: "); Serial.println(b);
-          menuButtons[b].press(true);  // tell the button it is pressed
-        } 
-        else 
-        {
-          menuButtons[b].press(false);  // tell the button it is NOT pressed
-        }
+    if (menuButtons[b].justPressed()) {
+        menuButtons[b].drawButton(true);  // draw invert!
+        delay(100); // UI debouncing
     }
-    
-    // now we can ask the buttons if their state has changed
-    for (uint8_t b=0; b<menuButtonCount; b++) 
-    {
-        if (menuButtons[b].justReleased()) 
-        {
-          Serial.print("Released: "); Serial.println(b);
-          menuButtons[b].drawButton();  // draw normal
-          btn = b;
-        }
-
-        if (menuButtons[b].justPressed()) 
-        {
-            menuButtons[b].drawButton(true);  // draw invert!
-            delay(100); // UI debouncing
-        }
-    }
-    return btn;
+  }
+  return btn;
 }
 
 //--------------------------------------------------------------------------------
@@ -386,7 +413,5 @@ void processMenu1() {
 
 //--------------------------------------------------------------------------------
 void loop() {
-
     processMenu1();
-   
 }
