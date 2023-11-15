@@ -30,6 +30,16 @@
    #define TFT_CS   15
    #define TFT_DC   33
    #define SD_CS    14
+#elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
+   #define STMPE_CS 8
+   #define TFT_CS   9
+   #define TFT_DC   10
+   #define SD_CS    7
+#elif defined(TEENSYDUINO)
+   #define TFT_DC   10
+   #define TFT_CS   4
+   #define STMPE_CS 3
+   #define SD_CS    8
 #elif defined(TEENSYDUINO)
    #define TFT_DC   10
    #define TFT_CS   4
