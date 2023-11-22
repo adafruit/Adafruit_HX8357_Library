@@ -222,7 +222,11 @@ static const uint8_t PROGMEM
             0x00,
             HX8357_MADCTL,
             1,
+#ifdef UNPHONE_SPIN
+            0x88, // by default the unphone screen reverses orientation / colour
+#else
             0xC0,
+#endif
             HX8357_COLMOD,
             1,
             0x55,
@@ -338,7 +342,11 @@ static const uint8_t PROGMEM
         0x55, // 16 bit
         HX8357_MADCTL,
         1,
+#ifdef UNPHONE_SPIN
+        0x88, // by default the unphone screen reverses orientation / colour
+#else
         0xC0,
+#endif
         HX8357_TEON,
         1,
         0x00, // TW off
