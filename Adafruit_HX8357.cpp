@@ -477,3 +477,35 @@ void Adafruit_HX8357::setAddrWindow(uint16_t x1, uint16_t y1, uint16_t w,
   SPI_WRITE16(y2);
   writeCommand(HX8357_RAMWR); // Write to RAM
 }
+
+/*!
+    @brief   Scroll display memory
+    @param   y How many pixels to scroll display by
+*/
+void Adafruit_HX8357::scrollTo(uint16_t y) {
+  uint8_t data[2];
+  data[0] = y >> 8;
+  data[1] = y & 0xff;
+  sendCommand(HX8357_VSCRSADD, (uint8_t *)data, 2);
+}
+
+
+/*!
+    @brief   Set the height of the Top and Bottom Scroll Margins
+    @param   top The height of the Top scroll margin
+    @param   bottom The height of the Bottom scroll margin
+ */
+void Adafruit_HX8357::setScrollMargins(uint16_t top, uint16_t bottom) {
+  // TFA+VSA+BFA must equal 320
+  if (top + bottom <= HX8357_TFTHEIGHT) {
+    uint16_t middle = HX8357_TFTHEIGHT - (top + bottom);
+    uint8_t data[6];
+    data[0] = top >> 8;
+    data[1] = top & 0xff;
+    data[2] = middle >> 8;
+    data[3] = middle & 0xff;
+    data[4] = bottom >> 8;
+    data[5] = bottom & 0xff;
+    sendCommand(HX8357_VSCRDEF, (uint8_t *)data, 6);
+  }
+}
