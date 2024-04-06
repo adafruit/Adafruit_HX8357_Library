@@ -66,11 +66,11 @@
 #define HX8357_RAMRD 0x2E ///< Read VRAm
 
 #define HX8357B_PTLAR 0x30    ///< (unknown)
-#define HX8357_VSCRDEF 0x33  ///< Vertical Scrolling Definition
+#define HX8357_VSCRDEF 0x33   ///< Vertical Scrolling Definition
 #define HX8357_TEON 0x35      ///< Tear enable on
 #define HX8357_TEARLINE 0x44  ///< (unknown)
 #define HX8357_MADCTL 0x36    ///< Memory access control
-#define HX8357_VSCRSADD 0x37 ///< Vertical Scrolling Start Address
+#define HX8357_VSCRSADD 0x37  ///< Vertical Scrolling Start Address
 #define HX8357_COLMOD 0x3A    ///< Color mode
 
 #define HX8357_SETOSC 0xB0      ///< Set oscillator
