@@ -489,7 +489,6 @@ void Adafruit_HX8357::scrollTo(uint16_t y) {
   sendCommand(HX8357_VSCRSADD, (uint8_t *)data, 2);
 }
 
-
 /*!
     @brief   Set the height of the Top and Bottom Scroll Margins
     @param   top The height of the Top scroll margin
