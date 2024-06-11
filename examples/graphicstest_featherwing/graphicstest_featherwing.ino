@@ -20,6 +20,9 @@
 #ifdef ESP8266
    #define TFT_CS   0
    #define TFT_DC   15
+#elif defined(ARDUINO_ADAFRUIT_FEATHER_ESP32C6)
+   #define TFT_CS   7
+   #define TFT_DC   8
 #elif defined(ESP32) && !defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S2) && !defined(ARDUINO_ADAFRUIT_FEATHER_ESP32S3)
    #define TFT_CS   15
    #define TFT_DC   33
