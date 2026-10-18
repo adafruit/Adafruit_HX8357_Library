@@ -124,16 +124,16 @@
 */
 class Adafruit_HX8357 : public Adafruit_SPITFT {
 public:
-  Adafruit_HX8357(int8_t _CS, int8_t _DC, int8_t _MOSI, int8_t _SCLK,
-                  int8_t _RST, int8_t _MISO, uint8_t type = HX8357D);
-  Adafruit_HX8357(int8_t _CS, int8_t _DC, int8_t _RST = -1,
+  Adafruit_HX8357(int16_t _CS, int16_t _DC, int16_t _MOSI, int16_t _SCLK,
+                  int16_t _RST, int16_t _MISO, uint8_t type = HX8357D);
+  Adafruit_HX8357(int16_t _CS, int16_t _DC, int16_t _RST = -1,
                   uint8_t type = HX8357D);
 #if !defined(ESP8266)
-  Adafruit_HX8357(SPIClass *spi, int8_t _CS, int8_t _DC, int8_t _RST = -1,
+  Adafruit_HX8357(SPIClass *spi, int16_t _CS, int16_t _DC, int16_t _RST = -1,
                   uint8_t type = HX8357D);
 #endif // end !ESP8266
-  Adafruit_HX8357(tftBusWidth busWidth, int8_t d0, int8_t wr, int8_t dc,
-                  int8_t cs = -1, int8_t rst = -1, int8_t rd = -1);
+  Adafruit_HX8357(tftBusWidth busWidth, int16_t d0, int16_t wr, int16_t dc,
+                  int16_t cs = -1, int16_t rst = -1, int16_t rd = -1);
   ~Adafruit_HX8357(void);
 
   void begin(uint32_t freq = 0), setRotation(uint8_t r),
