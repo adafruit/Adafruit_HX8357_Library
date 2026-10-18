@@ -90,8 +90,9 @@
     @return  Adafruit_HX8357 object.
     @note    Call the object's begin() function before use.
 */
-Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t mosi, int8_t sclk,
-                                 int8_t rst, int8_t miso, uint8_t type)
+Adafruit_HX8357::Adafruit_HX8357(int16_t cs, int16_t dc, int16_t mosi,
+                                 int16_t sclk, int16_t rst, int16_t miso,
+                                 uint8_t type)
     : Adafruit_SPITFT(HX8357_TFTWIDTH, HX8357_TFTHEIGHT, cs, dc, mosi, sclk,
                       rst, miso),
       displayType(type) {}
@@ -110,7 +111,8 @@ Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t mosi, int8_t sclk,
     @return  Adafruit_HX8357 object.
     @note    Call the object's begin() function before use.
 */
-Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t rst, uint8_t type)
+Adafruit_HX8357::Adafruit_HX8357(int16_t cs, int16_t dc, int16_t rst,
+                                 uint8_t type)
     : Adafruit_SPITFT(HX8357_TFTWIDTH, HX8357_TFTHEIGHT, cs, dc, rst),
       displayType(type) {}
 
@@ -131,8 +133,8 @@ Adafruit_HX8357::Adafruit_HX8357(int8_t cs, int8_t dc, int8_t rst, uint8_t type)
     @return  Adafruit_HX8357 object.
     @note    Call the object's begin() function before use.
 */
-Adafruit_HX8357::Adafruit_HX8357(SPIClass *spi, int8_t cs, int8_t dc,
-                                 int8_t rst, uint8_t type)
+Adafruit_HX8357::Adafruit_HX8357(SPIClass *spi, int16_t cs, int16_t dc,
+                                 int16_t rst, uint8_t type)
     : Adafruit_SPITFT(HX8357_TFTWIDTH, HX8357_TFTHEIGHT, spi, cs, dc, rst),
       displayType(type) {}
 #endif // end !ESP8266
@@ -153,8 +155,9 @@ Adafruit_HX8357::Adafruit_HX8357(SPIClass *spi, int8_t cs, int8_t dc,
     @param  rd        Read strobe pin # (optional, pass -1 if unused).
 */
 /**************************************************************************/
-Adafruit_HX8357::Adafruit_HX8357(tftBusWidth busWidth, int8_t d0, int8_t wr,
-                                 int8_t dc, int8_t cs, int8_t rst, int8_t rd)
+Adafruit_HX8357::Adafruit_HX8357(tftBusWidth busWidth, int16_t d0, int16_t wr,
+                                 int16_t dc, int16_t cs, int16_t rst,
+                                 int16_t rd)
     : Adafruit_SPITFT(HX8357_TFTWIDTH, HX8357_TFTHEIGHT, busWidth, d0, wr, dc,
                       cs, rst, rd) {}
 
